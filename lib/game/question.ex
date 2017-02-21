@@ -1,5 +1,7 @@
 defmodule Game.Question do
-  defstruct item: nil,
+  defstruct name: nil,
+            image_url: nil,
+            item: nil,
             topic: nil,
             answer: nil,
             options: []
@@ -11,7 +13,9 @@ defmodule Game.Question do
     answer = get_answer(item, topic)
     options = get_options(options_pool, topic, answer)
 
-    struct(__MODULE__, item: item,
+    struct(__MODULE__, name: item.name,
+                       image_url: item.image_url,
+                       item: item,
                        topic: topic,
                        answer: answer,
                        options: options)
