@@ -1,0 +1,722 @@
+{
+    "_index": "smg",
+    "_type": "object",
+    "_id": "co8094429",
+    "_score": 6.060905,
+    "_source": {
+        "admin": {
+            "created": 1207046469000,
+            "id": "object-8094429",
+            "language": "eng",
+            "modified": 1427198190000,
+            "processed": 1481586245794,
+            "source": "smgc",
+            "stream": "smg-online",
+            "uid": "co8094429",
+            "uuid": "9833b3be-c944-30b0-9d3b-6a18005827d2"
+        },
+        "categories": [
+            {
+                "museum": "SCM",
+                "name": "Telecommunications",
+                "value": "SCM - Telecommunications"
+            }
+        ],
+        "component": [
+            {
+                "measurements": {
+                    "dimensions": [
+                        {
+                            "dimension": "depth",
+                            "units": "in",
+                            "value": "1 3/16"
+                        },
+                        {
+                            "dimension": "depth",
+                            "units": "mm",
+                            "value": "30"
+                        },
+                        {
+                            "dimension": "height",
+                            "units": "in",
+                            "value": "6 3/8"
+                        },
+                        {
+                            "dimension": "height",
+                            "units": "mm",
+                            "value": "162"
+                        },
+                        {
+                            "dimension": "width",
+                            "units": "in",
+                            "value": "2 3/8"
+                        },
+                        {
+                            "dimension": "width",
+                            "units": "mm",
+                            "value": "60"
+                        },
+                        {
+                            "units": "kg",
+                            "value": "0.177"
+                        },
+                        {
+                            "units": "lbs",
+                            "value": "0.39022"
+                        }
+                    ],
+                    "display": "overall (with battery): 162 mm x 60 mm x 30 mm, .177 kg"
+                },
+                "name": "overall (with battery)"
+            },
+            {
+                "measurements": {
+                    "dimensions": [
+                        {
+                            "dimension": "depth",
+                            "units": "mm",
+                            "value": "25"
+                        },
+                        {
+                            "dimension": "height",
+                            "units": "in",
+                            "value": "6 3/8"
+                        },
+                        {
+                            "dimension": "height",
+                            "units": "mm",
+                            "value": "162"
+                        },
+                        {
+                            "dimension": "width",
+                            "units": "in",
+                            "value": "2 3/8"
+                        },
+                        {
+                            "dimension": "width",
+                            "units": "mm",
+                            "value": "60"
+                        }
+                    ],
+                    "display": "overall (without battery): 162 mm x 60 mm x 25 mm,"
+                },
+                "name": "overall (without battery)"
+            }
+        ],
+        "description": [
+            {
+                "date": {
+                    "earliest": 2014,
+                    "latest": 2014,
+                    "value": "2014-03-20"
+                },
+                "primary": true,
+                "type": "description",
+                "value": "Philips Cellnet 'Diga' TCD308 mobile phone, made by Philips, France, 1997.  CN: VYP09902E04442"
+            }
+        ],
+        "flag": {
+            "flag1": "N",
+            "flag2": "N",
+            "flag3": "N",
+            "flag4": "Y"
+        },
+        "identifier": [
+            {
+                "primary": true,
+                "type": "accession number",
+                "value": "2008-5015/6"
+            }
+        ],
+        "language": [
+            "eng"
+        ],
+        "legal": {
+            "credit_line": "National Media Museum, Bradford",
+            "legal_status": "permanent collection"
+        },
+        "lifecycle": {
+            "creation": [
+                {
+                    "date": [
+                        {
+                            "earliest": 1997,
+                            "latest": 2001,
+                            "primary": true,
+                            "value": "1997-2001"
+                        }
+                    ],
+                    "maker": [
+                        {
+                            "@link": {
+                                "role": [
+                                    {
+                                        "value": "maker"
+                                    }
+                                ],
+                                "type": "reference"
+                            },
+                            "admin": {
+                                "id": "agent-3550",
+                                "uid": "cp3550",
+                                "uuid": "4393a00c-720e-32ce-8e55-48381c53819b"
+                            },
+                            "summary_title": "Philips Electronics"
+                        }
+                    ],
+                    "places": [
+                        {
+                            "@link": {
+                                "role": [
+                                    {
+                                        "value": "made"
+                                    }
+                                ],
+                                "type": "reference"
+                            },
+                            "admin": {
+                                "id": "place-184",
+                                "uid": "cd184",
+                                "uuid": "d816697a-5938-35dc-b284-6503a94f5349"
+                            },
+                            "summary_title": "France"
+                        }
+                    ]
+                }
+            ]
+        },
+        "locations": [
+            {
+                "@link": {
+                    "type": "literal"
+                },
+                "admin": {
+                    "id": "location-1718175",
+                    "uuid": "adbb24ff-0e56-3a33-a8e7-0360b1fc0131"
+                },
+                "facilities": [
+                    {
+                        "@link": {
+                            "type": "reference"
+                        },
+                        "admin": {
+                            "id": "facility-6744",
+                            "uid": "cf6744",
+                            "uuid": "c0b394a7-ef3f-3521-922a-a2e92b917a06"
+                        },
+                        "summary_title": "Science Museum, Information Age Gallery: Cell"
+                    }
+                ],
+                "level1": "S",
+                "level2": "G48-49",
+                "level3": "WM",
+                "level4": "CEL01",
+                "name": [
+                    {
+                        "primary": true,
+                        "value": "Science Museum, Information Age Gallery: Cell"
+                    },
+                    {
+                        "type": "gallery",
+                        "value": "Information Age Gallery: Cell"
+                    },
+                    {
+                        "type": "museum",
+                        "value": "Science Museum"
+                    }
+                ],
+                "purpose": "on display",
+                "value": "Science Museum, Information Age Gallery: Cell"
+            }
+        ],
+        "multimedia": [
+            {
+                "@link": {
+                    "type": "reference"
+                },
+                "admin": {
+                    "id": "media-53460",
+                    "source": "smgi",
+                    "uid": "i53460",
+                    "uuid": "dc674131-6c08-34c1-bb23-266a7699ef1a"
+                },
+                "credit": "© The Board of Trustees of the Science Museum",
+                "for_sale": "0",
+                "identifier": [
+                    {
+                        "type": "iBase id",
+                        "value": "53460"
+                    }
+                ],
+                "priority": "0.5",
+                "processed": {
+                    "large": {
+                        "format": "jpeg",
+                        "location": "W/P/A/large_2008_5015_0006__0001_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 1536
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 1152
+                                }
+                            ]
+                        },
+                        "modified": 1472028009000,
+                        "resizable": true,
+                        "type": "image"
+                    },
+                    "large_thumbnail": {
+                        "format": "jpeg",
+                        "location": "W/P/A/large_thumbnail_2008_5015_0006__0001_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 427
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 320
+                                }
+                            ]
+                        },
+                        "modified": 1472028009000,
+                        "resizable": true,
+                        "type": "image"
+                    },
+                    "medium": {
+                        "format": "jpeg",
+                        "location": "W/P/A/medium_2008_5015_0006__0001_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 768
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 576
+                                }
+                            ]
+                        },
+                        "modified": 1472028009000,
+                        "resizable": true,
+                        "type": "image"
+                    },
+                    "medium_thumbnail": {
+                        "format": "jpeg",
+                        "location": "W/P/A/medium_thumbnail_2008_5015_0006__0001_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 256
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 192
+                                }
+                            ]
+                        },
+                        "modified": 1472028009000,
+                        "resizable": true,
+                        "type": "image"
+                    },
+                    "small_thumbnail": {
+                        "format": "jpeg",
+                        "location": "W/P/A/small_thumbnail_2008_5015_0006__0001_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 64
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 48
+                                }
+                            ]
+                        },
+                        "modified": 1472028009000,
+                        "resizable": true,
+                        "type": "image"
+                    }
+                },
+                "public_view": "1",
+                "publish": "1",
+                "sort": "2015-06-08 13:37:55.0",
+                "source": {
+                    "legal": {
+                        "rights": [
+                            {
+                                "details": "Science Museum Group Collection",
+                                "usage_terms": "CC-BY-NC-SA 4.0"
+                            }
+                        ]
+                    },
+                    "title": [
+                        {
+                            "type": "caption",
+                            "value": "Philips Cellnet 'Diga' TCD308 mobile phone, made by Philips"
+                        },
+                        {
+                            "type": "main title",
+                            "value": "Philips Cellnet 'Diga' TCD308 mobile phone, made by Philips, France, 1997. CN: VYP09902E04442"
+                        }
+                    ]
+                },
+                "traffic_light": "Green",
+                "type": {
+                    "base": "media",
+                    "type": "image"
+                }
+            },
+            {
+                "@link": {
+                    "type": "reference"
+                },
+                "admin": {
+                    "id": "media-53461",
+                    "source": "smgi",
+                    "uid": "i53461",
+                    "uuid": "7c932c7d-e17d-3add-a182-ff9e3291d6f5"
+                },
+                "credit": "© The Board of Trustees of the Science Museum",
+                "for_sale": "0",
+                "identifier": [
+                    {
+                        "type": "iBase id",
+                        "value": "53461"
+                    }
+                ],
+                "priority": "0.5",
+                "processed": {
+                    "large": {
+                        "format": "jpeg",
+                        "location": "W/P/A/large_2008_5015_0006__0002_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 1536
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 1150
+                                }
+                            ]
+                        },
+                        "modified": 1472028002000,
+                        "resizable": true,
+                        "type": "image"
+                    },
+                    "large_thumbnail": {
+                        "format": "jpeg",
+                        "location": "W/P/A/large_thumbnail_2008_5015_0006__0002_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 427
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 320
+                                }
+                            ]
+                        },
+                        "modified": 1472028002000,
+                        "resizable": true,
+                        "type": "image"
+                    },
+                    "medium": {
+                        "format": "jpeg",
+                        "location": "W/P/A/medium_2008_5015_0006__0002_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 769
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 576
+                                }
+                            ]
+                        },
+                        "modified": 1472028002000,
+                        "resizable": true,
+                        "type": "image"
+                    },
+                    "medium_thumbnail": {
+                        "format": "jpeg",
+                        "location": "W/P/A/medium_thumbnail_2008_5015_0006__0002_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 256
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 192
+                                }
+                            ]
+                        },
+                        "modified": 1472028002000,
+                        "resizable": true,
+                        "type": "image"
+                    },
+                    "small_thumbnail": {
+                        "format": "jpeg",
+                        "location": "W/P/A/small_thumbnail_2008_5015_0006__0002_.jpg",
+                        "location_is_relative": true,
+                        "measurements": {
+                            "dimensions": [
+                                {
+                                    "dimension": "height",
+                                    "units": "pixels",
+                                    "value": 64
+                                },
+                                {
+                                    "dimension": "width",
+                                    "units": "pixels",
+                                    "value": 48
+                                }
+                            ]
+                        },
+                        "modified": 1472028002000,
+                        "resizable": true,
+                        "type": "image"
+                    }
+                },
+                "public_view": "1",
+                "publish": "1",
+                "sort": "2015-06-08 13:38:22.0",
+                "source": {
+                    "legal": {
+                        "rights": [
+                            {
+                                "details": "Science Museum Group Collection",
+                                "usage_terms": "CC-BY-NC-SA 4.0"
+                            }
+                        ]
+                    },
+                    "title": [
+                        {
+                            "type": "caption",
+                            "value": "Philips Cellnet 'Diga' TCD308 mobile phone, made by Philips"
+                        },
+                        {
+                            "type": "main title",
+                            "value": "Philips Cellnet 'Diga' TCD308 mobile phone, made by Philips, France, 1997. CN: VYP09902E04442"
+                        }
+                    ]
+                },
+                "traffic_light": "Green",
+                "type": {
+                    "base": "media",
+                    "type": "image"
+                }
+            }
+        ],
+        "name": [
+            {
+                "primary": true,
+                "value": "mobile telephone"
+            }
+        ],
+        "options": {
+            "option3": "Liffen, John"
+        },
+        "summary_title": "Philips TCD308 mobile telephone, 1997-2001 (mobile telephone)",
+        "terms": [
+            {
+                "@link": {
+                    "role": [
+                        {
+                            "value": "Object Name"
+                        }
+                    ],
+                    "type": "reference"
+                },
+                "admin": {
+                    "id": "term-267330",
+                    "uid": "ct267330",
+                    "uuid": "239f3e18-fc4a-3bab-b6ea-b1e909acb389"
+                },
+                "hierarchy": [
+                    {
+                        "@link": {
+                            "impact": true,
+                            "type": "reference"
+                        },
+                        "admin": {
+                            "available": true,
+                            "id": "term-268027",
+                            "status": "valid and published",
+                            "uid": "ct268027",
+                            "uuid": "55feb126-f6b5-39af-ba04-cc57b4834b8f"
+                        },
+                        "name": [
+                            {
+                                "primary": true,
+                                "type": "preferred",
+                                "value": "telephone"
+                            }
+                        ],
+                        "sort": 0
+                    },
+                    {
+                        "@link": {
+                            "impact": true,
+                            "type": "reference"
+                        },
+                        "admin": {
+                            "available": true,
+                            "id": "term-265255",
+                            "status": "valid and published",
+                            "uid": "ct265255",
+                            "uuid": "b4973aee-6a1a-3c44-9144-5771c3ac04ab"
+                        },
+                        "name": [
+                            {
+                                "primary": true,
+                                "type": "preferred",
+                                "value": "<telecommunication system component>"
+                            }
+                        ],
+                        "sort": 1
+                    },
+                    {
+                        "@link": {
+                            "impact": true,
+                            "type": "reference"
+                        },
+                        "admin": {
+                            "available": true,
+                            "id": "term-265345",
+                            "status": "valid and published",
+                            "uid": "ct265345",
+                            "uuid": "5cdc8c75-30cf-31ce-b43b-f12c416b6136"
+                        },
+                        "name": [
+                            {
+                                "primary": true,
+                                "type": "preferred",
+                                "value": "<system component>"
+                            }
+                        ],
+                        "sort": 2
+                    },
+                    {
+                        "@link": {
+                            "impact": true,
+                            "type": "reference"
+                        },
+                        "admin": {
+                            "available": true,
+                            "id": "term-265344",
+                            "status": "valid and published",
+                            "uid": "ct265344",
+                            "uuid": "61431778-651a-3d1f-875b-71f327ca46ee"
+                        },
+                        "name": [
+                            {
+                                "primary": true,
+                                "type": "preferred",
+                                "value": "<component by specific context>"
+                            }
+                        ],
+                        "sort": 3
+                    },
+                    {
+                        "@link": {
+                            "impact": true,
+                            "type": "reference"
+                        },
+                        "admin": {
+                            "available": true,
+                            "id": "term-265058",
+                            "status": "valid and published",
+                            "uid": "ct265058",
+                            "uuid": "0827df1b-e222-3ce4-900a-4cec98fc3636"
+                        },
+                        "name": [
+                            {
+                                "primary": true,
+                                "type": "preferred",
+                                "value": "component - object"
+                            }
+                        ],
+                        "sort": 4
+                    },
+                    {
+                        "@link": {
+                            "impact": true,
+                            "type": "reference"
+                        },
+                        "admin": {
+                            "available": true,
+                            "id": "term-262384",
+                            "status": "valid and published",
+                            "uid": "ct262384",
+                            "uuid": "3be339fe-002f-38a4-af30-e17fbe24b638"
+                        },
+                        "name": [
+                            {
+                                "primary": true,
+                                "type": "preferred",
+                                "value": "<object facet>"
+                            }
+                        ],
+                        "sort": 5
+                    }
+                ],
+                "summary_title": "mobile telephone"
+            }
+        ],
+        "title": [
+            {
+                "primary": true,
+                "type": "display title",
+                "value": "Philips TCD308 mobile telephone, 1997-2001"
+            }
+        ],
+        "type": {
+            "base": "object",
+            "record_type": "WHOLE"
+        }
+    }
+}
