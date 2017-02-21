@@ -11,6 +11,10 @@ defmodule Game.ItemStore do
                           read_concurrency: true])
   end
 
+  def by_category(name) do
+    :ets.select(__MODULE__, [{{:"_", name, :"$1"}, [], [:"$1"]}])
+  end
+
   def start_link do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
@@ -32,10 +36,8 @@ defmodule Game.ItemStore do
 
   defp process_line(line) do
     decoded = Poison.decode!(line)
-
     data = Map.get(decoded, "_source")
-    id = Map.get(decoded, "_id")
-
-    :ets.insert(__MODULE__, {id, data})
+    item = Game.Item.from_raw_source(data)
+    :ets.insert(__MODULE__, {item.id, item.category, item})
   end
 end
