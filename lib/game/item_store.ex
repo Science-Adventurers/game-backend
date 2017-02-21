@@ -9,6 +9,10 @@ defmodule Game.ItemStore do
                           read_concurrency: true])
   end
 
+  def all do
+    :ets.select(__MODULE__, [{{:"_", :"_", :"$1"}, [], [:"$1"]}])
+  end
+
   def by_category(name) do
     :ets.select(__MODULE__, [{{:"_", name, :"$1"}, [], [:"$1"]}])
   end
