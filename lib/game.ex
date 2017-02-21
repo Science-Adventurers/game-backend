@@ -10,6 +10,7 @@ defmodule Game do
     children = [
       # Start the endpoint when the application starts
       supervisor(Game.Endpoint, []),
+      worker(Game.ItemStore, [])
       # Start your own worker by calling: Game.Worker.start_link(arg1, arg2, arg3)
       # worker(Game.Worker, [arg1, arg2, arg3]),
     ]
@@ -24,6 +25,11 @@ defmodule Game do
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
     Game.Endpoint.config_change(changed, removed)
+    :ok
+  end
+
+  def start_phase(:create_item_store_table, _, _) do
+    Game.ItemStore = Game.ItemStore.create_table()
     :ok
   end
 end

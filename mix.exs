@@ -17,6 +17,7 @@ defmodule Game.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Game, []},
+     start_phases: [create_item_store_table: []],
      applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :gettext]]
   end
 
