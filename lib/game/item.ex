@@ -1,13 +1,21 @@
 defmodule Game.Item do
   defstruct id: nil,
+            name: nil,
+            image_url: nil,
             category: nil,
             creator: :not_available,
             creation_date: :not_available,
             location: :not_available,
             data: %{}
 
+  @image_base_url "http://smgco-images.s3.amazonaws.com/media/"
+
   def from_raw_source(source) do
     id = get_in(source, ["admin", "id"])
+    name = get_in(source, ["title", Access.at(0), "value"])
+    image_path = get_in(source, ["multimedia", Access.at(0),
+                                 "processed", "large_thumbnail",
+                                 "location"])
     [category] = get_in(source, ["categories", Access.all(), "name"])
     creation = get_creation(source)
 
@@ -16,6 +24,8 @@ defmodule Game.Item do
     location = get_location(creation)
 
     %__MODULE__{id: id,
+                name: name,
+                image_url: @image_base_url <> image_path,
                 category: category,
                 creator: creator,
                 creation_date: creation_date,
