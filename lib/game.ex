@@ -9,8 +9,7 @@ defmodule Game do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
-      supervisor(Game.Endpoint, []),
-      worker(Game.ItemStore, [])
+      supervisor(Game.Endpoint, [])
       # Start your own worker by calling: Game.Worker.start_link(arg1, arg2, arg3)
       # worker(Game.Worker, [arg1, arg2, arg3]),
     ]
@@ -31,5 +30,9 @@ defmodule Game do
   def start_phase(:create_item_store_table, _, _) do
     Game.ItemStore = Game.ItemStore.create_table()
     :ok
+  end
+
+  def start_phase(:populate_item_store, _, _) do
+    :ok = Game.ItemStore.populate!
   end
 end

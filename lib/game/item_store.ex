@@ -1,6 +1,4 @@
 defmodule Game.ItemStore do
-  use GenServer
-
   @data_file :code.priv_dir(:game)
              |> List.to_string
              |> Path.join("data/smg_ondisplay_with_image.json")
@@ -15,23 +13,13 @@ defmodule Game.ItemStore do
     :ets.select(__MODULE__, [{{:"_", name, :"$1"}, [], [:"$1"]}])
   end
 
-  def start_link do
-    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
-  end
-
-  def init(:ok) do
-    send(self(), :parse_items)
-    {:ok, []}
-  end
-
-  def handle_info(:parse_items, state) do
+  def populate! do
     @data_file
     |> File.stream!
     |> Stream.map(fn(line) ->
       spawn_link(fn() -> process_line(line) end)
     end)
     |> Stream.run
-    {:noreply, state}
   end
 
   defp process_line(line) do
