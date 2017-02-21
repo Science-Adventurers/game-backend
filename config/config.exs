@@ -13,6 +13,9 @@ config :game, Game.Endpoint,
   pubsub: [name: Game.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :game,
+  data_path: Path.expand("../priv/data/smg_ondisplay_with_image.json", __DIR__)
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

@@ -1,9 +1,4 @@
 defmodule Game.ItemStore do
-  @data_file :code.priv_dir(:game)
-             |> List.to_string
-             |> Path.join("data/smg_ondisplay_with_image.json")
-             |> IO.inspect
-
   def create_table do
     :ets.new(__MODULE__, [:public,
                           :named_table,
@@ -40,12 +35,16 @@ defmodule Game.ItemStore do
   end
 
   def populate! do
-    @data_file
+    data_file()
     |> File.stream!
     |> Stream.map(fn(line) ->
       spawn_link(fn() -> process_line(line) end)
     end)
     |> Stream.run
+  end
+
+  defp data_file do
+    Application.get_env(:game, :data_path)
   end
 
   defp process_line(line) do
