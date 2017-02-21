@@ -14,6 +14,8 @@ use Mix.Config
 config :game, Game.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "example.com", port: 80],
+  check_origin: false,
+  server: true,
   cache_static_manifest: "priv/static/manifest.json"
 
 # Do not print debug messages in production
