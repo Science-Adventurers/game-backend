@@ -2,6 +2,7 @@ defmodule Game.ItemStore do
   @data_file :code.priv_dir(:game)
              |> List.to_string
              |> Path.join("data/smg_ondisplay_with_image.json")
+             |> IO.inspect
 
   def create_table do
     :ets.new(__MODULE__, [:public,
