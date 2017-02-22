@@ -10,14 +10,14 @@ defmodule Game.QuizChannel do
   def handle_in("start-game", %{"category" => category}, socket) do
     {:ok, pid} = RoundSupervisor.get_or_start_round(category)
     if Round.has_player?(pid, socket.assigns.player_name) do
-      data = Round.get_data(pid)
+      {:ok, data} = Round.get_player_state(pid, socket.assigns.player_name)
       payload = %{current_question: serialize_question(data.current_question),
                   remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
       {:reply, {:ok, payload}, assign(socket, :category, category)}
     else
       case Round.join(category, socket.assigns.player_name) do
         :ok ->
-          data = Round.get_data(pid)
+          {:ok, data} = Round.get_player_state(pid, socket.assigns.player_name)
           payload = %{current_question: serialize_question(data.current_question),
                       remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
           {:reply, {:ok, payload}, assign(socket, :category, category)}

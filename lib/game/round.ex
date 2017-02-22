@@ -4,10 +4,15 @@ defmodule Game.Round do
 
   alias Game.{ItemStore, Question, RoundRegistry}
 
+  defmodule PlayerState do
+    defstruct current_question: nil,
+              remaining_questions: []
+  end
+
   defmodule Data do
     defstruct category: nil,
               max_players: 3,
-              players: MapSet.new,
+              players: %{},
               current_question: nil,
               remaining_questions: []
   end
@@ -30,6 +35,13 @@ defmodule Game.Round do
   end
   def has_player?(round, player_name) do
     :gen_statem.call(round, {:has_player?, player_name})
+  end
+
+  def get_player_state(category, player_name) when is_binary(category) do
+    :gen_statem.call(via_tuple(category), {:get_player_state, player_name})
+  end
+  def get_player_state(round, player_name) do
+    :gen_statem.call(round, {:get_player_state, player_name})
   end
 
   def get_data(category) when is_binary(category) do
@@ -70,9 +82,12 @@ defmodule Game.Round do
   ### State transitions ###
 
   def waiting_for_players({:call, from}, {:join, player_name}, data) do
-    new_players = MapSet.put(data.players, player_name)
+    new_players = Map.put_new(data.players,
+                              player_name,
+                              %PlayerState{current_question: data.current_question,
+                                           remaining_questions: data.remaining_questions})
     new_data = %{data | players: new_players}
-    new_state = if MapSet.size(new_players) >= data.max_players do
+    new_state = if Map.size(new_players) >= data.max_players do
       :running
     else
       :waiting_for_players
@@ -96,7 +111,16 @@ defmodule Game.Round do
     {:keep_state, data, [{:reply, from, data}]}
   end
   defp handle_event({:call, from}, {:has_player?, player_name}, data) do
-    has_player = MapSet.member?(data.players, player_name)
+    has_player = Map.has_key?(data.players, player_name)
     {:keep_state, data, [{:reply, from, has_player}]}
+  end
+  defp handle_event({:call, from}, {:get_player_state, player_name}, data) do
+    reply = case Map.get(data.players, player_name) do
+      nil ->
+        {:error, :not_joined}
+      state ->
+        {:ok, state}
+    end
+    {:keep_state, data, [{:reply, from, reply}]}
   end
 end
