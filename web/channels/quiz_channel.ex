@@ -38,6 +38,5 @@ defmodule Game.QuizChannel do
   defp serialize_question(question) do
     question
     |> Map.from_struct
-    |> Map.delete(:item)
   end
 end
