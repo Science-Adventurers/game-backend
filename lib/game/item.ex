@@ -35,8 +35,8 @@ defmodule Game.Item do
 
   def can_generate_question?(item) do
     item.creator !== :not_available
-      && item.creation_date !== :not_available
-      && item.location !== :not_available
+      or item.creation_date !== :not_available
+      or item.location !== :not_available
   end
 
   defp get_creation(source) do
