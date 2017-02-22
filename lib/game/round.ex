@@ -1,10 +1,14 @@
 defmodule Game.Round do
   @behaviour :gen_statem
+  @number_of_questions 10
+
+  alias Game.{ItemStore, Question}
 
   defmodule Data do
     defstruct category: nil,
               max_players: 3,
-              players: MapSet.new
+              players: MapSet.new,
+              questions: []
   end
 
   ### Public api ###
@@ -24,7 +28,12 @@ defmodule Game.Round do
   ### Mandatory callbacks ###
 
   def init(category) do
-    data = %Data{category: category}
+    options_pool = ItemStore.options_pool(category)
+    questions = category
+                |> ItemStore.random_from_category(@number_of_questions)
+                |> Enum.map(fn(item) -> Question.from_item(item, options_pool) end)
+    data = %Data{category: category,
+                 questions: questions}
     {:ok, :waiting_for_players, data}
   end
 

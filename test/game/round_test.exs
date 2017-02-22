@@ -25,4 +25,10 @@ defmodule Game.RoundTest do
 
     assert {:running, _} = :sys.get_state(round)
   end
+
+  test "it generates 10 random questions for that category", %{round: round} do
+    data = Game.Round.get_data(round)
+
+    assert Enum.all?(data.questions, fn(q) -> q.item.category == "Mathematics" end)
+  end
 end

@@ -5,6 +5,18 @@ defmodule Game.ItemStore do
                           read_concurrency: true])
   end
 
+  def options_pool(name) do
+    %{creators: creators_by_category(name),
+      locations: locations_by_category(name),
+      creation_dates: creation_dates_by_category(name)}
+  end
+
+  def random_from_category(name, count) do
+    name
+    |> by_category
+    |> Enum.take_random(count)
+  end
+
   def locations_by_category(name) do
     name
     |> match_spec_for_location
