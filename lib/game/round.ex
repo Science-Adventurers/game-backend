@@ -137,7 +137,12 @@ defmodule Game.Round do
         new_players = Map.put(data.players, player_name, new_player_state)
         new_data = Map.put(data, :players, new_players)
         score = calculate_score(new_answers)
-        {:next_state, :running, new_data, [{:reply, from, {:ok, :round_over, score}}]}
+        if all_players_finished?(new_players) do
+          {:next_state, :finish, new_data, [{:reply, from, {:ok, :round_over, score}},
+                                            {:next_event, :internal, :stop}]}
+        else
+          {:next_state, :running, new_data, [{:reply, from, {:ok, :round_over, score}}]}
+        end
       %{current_question: current_question, remaining_questions: [new_question | remaining]} = player_state ->
         new_player_state = %{player_state | answers: Map.put(player_state.answers, current_question, answer),
                                             current_question: new_question,
@@ -149,6 +154,10 @@ defmodule Game.Round do
   end
   def running(event_type, event_content, data) do
     handle_event(event_type, event_content, data)
+  end
+
+  def finish(_, _, _) do
+    {:stop, :normal}
   end
 
   ### Common events ###
@@ -168,5 +177,13 @@ defmodule Game.Round do
         {:ok, state}
     end
     {:keep_state, data, [{:reply, from, reply}]}
+  end
+
+  defp all_players_finished?(players) do
+    players
+    |> Map.values
+    |> Enum.all?(fn(ps) ->
+      ps.current_question == nil && ps.remaining_questions == []
+    end)
   end
 end

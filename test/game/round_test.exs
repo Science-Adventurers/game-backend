@@ -105,4 +105,26 @@ defmodule Game.RoundTest do
     assert score >= 0
     assert {:error, :round_over} == Game.Round.answer(round, "Triangles", "1902")
   end
+
+  test "all players finish", %{round: round} do
+    :ok = Game.Round.join(round, "Triangles")
+    :ok = Game.Round.join(round, "Squares")
+    :ok = Game.Round.join(round, "Circles")
+
+    Enum.each(1..4, fn(_) ->
+      {:ok, :next_round} = Game.Round.answer(round, "Triangles", "1902")
+    end)
+    Enum.each(1..4, fn(_) ->
+      {:ok, :next_round} = Game.Round.answer(round, "Squares", "1902")
+    end)
+    Enum.each(1..4, fn(_) ->
+      {:ok, :next_round} = Game.Round.answer(round, "Circles", "1902")
+    end)
+
+    {:ok, :round_over, _score} = Game.Round.answer(round, "Triangles", "1902")
+    {:ok, :round_over, _score} = Game.Round.answer(round, "Squares", "1902")
+    {:ok, :round_over, _score} = Game.Round.answer(round, "Circles", "1902")
+
+    assert Process.info(round) == nil
+  end
 end
