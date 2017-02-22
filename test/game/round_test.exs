@@ -2,7 +2,8 @@ defmodule Game.RoundTest do
   use ExUnit.Case
 
   setup do
-    {:ok, round} = Game.Round.start_link("Mathematics")
+    max_players = 3
+    {:ok, round} = Game.Round.start_link("Mathematics", max_players)
 
     {:ok, round: round}
   end

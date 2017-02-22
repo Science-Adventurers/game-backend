@@ -6,7 +6,8 @@ defmodule Game.Round do
 
   defmodule PlayerState do
     defstruct current_question: nil,
-              remaining_questions: []
+              remaining_questions: [],
+              answers: %{}
   end
 
   defmodule Data do
@@ -19,8 +20,8 @@ defmodule Game.Round do
 
   ### Public api ###
 
-  def start_link(category) do
-    :gen_statem.start_link(via_tuple(category), __MODULE__, category, [])
+  def start_link(category, max_players) do
+    :gen_statem.start_link(via_tuple(category), __MODULE__, {category, max_players}, [])
   end
 
   def join(category, player_name) when is_binary(category) do
@@ -57,13 +58,14 @@ defmodule Game.Round do
 
   ### Mandatory callbacks ###
 
-  def init(category) do
+  def init({category, max_players}) do
     options_pool = ItemStore.options_pool(category)
     questions = category
                 |> ItemStore.random_from_category(@number_of_questions)
                 |> Enum.map(fn(item) -> Question.from_item(item, options_pool) end)
     [current | remaining] = questions
     data = %Data{category: category,
+                 max_players: max_players,
                  current_question: current,
                  remaining_questions: remaining}
     {:ok, :waiting_for_players, data}
