@@ -33,6 +33,12 @@ defmodule Game.Item do
                 data: source}
   end
 
+  def can_generate_question?(item) do
+    item.creator !== :not_available
+      && item.creation_date !== :not_available
+      && item.location !== :not_available
+  end
+
   defp get_creation(source) do
     get_in(source, ["lifecycle", "creation"])
   end

@@ -51,7 +51,11 @@ defmodule Game.ItemStore do
     decoded = Poison.decode!(line)
     data = Map.get(decoded, "_source")
     item = Game.Item.from_raw_source(data)
-    :ets.insert(__MODULE__, {item.id, item.category, item})
+    if Game.Item.can_generate_question?(item) do
+      :ets.insert(__MODULE__, {item.id, item.category, item})
+    else
+      :noop
+    end
   end
 
   defp get_all(match_head) do
