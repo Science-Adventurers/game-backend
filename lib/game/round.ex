@@ -8,7 +8,8 @@ defmodule Game.Round do
     defstruct category: nil,
               max_players: 3,
               players: MapSet.new,
-              questions: []
+              current_question: nil,
+              remaining_questions: []
   end
 
   ### Public api ###
@@ -49,8 +50,10 @@ defmodule Game.Round do
     questions = category
                 |> ItemStore.random_from_category(@number_of_questions)
                 |> Enum.map(fn(item) -> Question.from_item(item, options_pool) end)
+    [current | remaining] = questions
     data = %Data{category: category,
-                 questions: questions}
+                 current_question: current,
+                 remaining_questions: remaining}
     {:ok, :waiting_for_players, data}
   end
 
