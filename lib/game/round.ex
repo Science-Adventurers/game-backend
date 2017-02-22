@@ -138,6 +138,7 @@ defmodule Game.Round do
         new_data = Map.put(data, :players, new_players)
         score = calculate_score(new_answers)
         if all_players_finished?(new_players) do
+          record_score(new_data)
           {:next_state, :finish, new_data, [{:reply, from, {:ok, :round_over, score}},
                                             {:next_event, :internal, :stop}]}
         else
@@ -184,6 +185,13 @@ defmodule Game.Round do
     |> Map.values
     |> Enum.all?(fn(ps) ->
       ps.current_question == nil && ps.remaining_questions == []
+    end)
+  end
+
+  defp record_score(data) do
+    Enum.each(data.players, fn({name, state}) ->
+      score = calculate_score(state.answers)
+      Game.Leaderboard.record(name, data.category, score)
     end)
   end
 end

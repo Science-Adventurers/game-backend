@@ -5,9 +5,9 @@ defmodule Game.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api/questions", Game do
+  scope "/api", Game do
     pipe_through :api
 
-    get "/random", QuestionsController, :random
+    resources "/leaderboard", LeaderboardController, only: [:index]
   end
 end

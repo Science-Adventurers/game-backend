@@ -11,7 +11,8 @@ defmodule Game do
       # Start the endpoint when the application starts
       supervisor(Registry, [:unique, Game.RoundRegistry]),
       supervisor(Game.Endpoint, []),
-      supervisor(Game.RoundSupervisor, [])
+      supervisor(Game.RoundSupervisor, []),
+      worker(Game.Leaderboard, [])
       # Start your own worker by calling: Game.Worker.start_link(arg1, arg2, arg3)
       # worker(Game.Worker, [arg1, arg2, arg3]),
     ]
