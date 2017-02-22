@@ -1,6 +1,13 @@
 defmodule Game.RoundSupervisor do
   use Supervisor
 
+  def get_or_start_round(category) do
+    case Registry.lookup(Game.RoundRegistry, category) do
+      [] -> start_child(category)
+      [{pid, _}] -> {:ok, pid}
+    end
+  end
+
   def start_child(category) do
     Supervisor.start_child(__MODULE__, [category])
   end

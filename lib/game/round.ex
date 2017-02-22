@@ -2,7 +2,7 @@ defmodule Game.Round do
   @behaviour :gen_statem
   @number_of_questions 10
 
-  alias Game.{ItemStore, Question}
+  alias Game.{ItemStore, Question, RoundRegistry}
 
   defmodule Data do
     defstruct category: nil,
@@ -14,15 +14,25 @@ defmodule Game.Round do
   ### Public api ###
 
   def start_link(category) do
-    :gen_statem.start_link(__MODULE__, category, [])
+    :gen_statem.start_link(via_tuple(category), __MODULE__, category, [])
   end
 
+  def join(category, player_name) when is_binary(category) do
+    :gen_statem.call(via_tuple(category), {:join, player_name})
+  end
   def join(round, player_name) do
     :gen_statem.call(round, {:join, player_name})
   end
 
+  def get_data(category) when is_binary(category) do
+    :gen_statem.call(via_tuple(category), :get_data)
+  end
   def get_data(round) do
     :gen_statem.call(round, :get_data)
+  end
+
+  def via_tuple(category) do
+    {:via, Registry, {RoundRegistry, category}}
   end
 
   ### Mandatory callbacks ###

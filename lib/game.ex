@@ -9,6 +9,7 @@ defmodule Game do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
+      supervisor(Registry, [:unique, Game.RoundRegistry]),
       supervisor(Game.Endpoint, []),
       supervisor(Game.RoundSupervisor, [])
       # Start your own worker by calling: Game.Worker.start_link(arg1, arg2, arg3)
