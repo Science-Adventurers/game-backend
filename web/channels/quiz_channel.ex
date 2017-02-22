@@ -16,7 +16,8 @@ defmodule Game.QuizChannel do
           %{type: "score",
             score: Round.calculate_score(data.answers)}
         current_question ->
-          %{current_question: serialize_question(current_question),
+          %{type: "next-round",
+            current_question: serialize_question(current_question),
             remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
       end
       {:reply, {:ok, payload}, assign(socket, :category, category)}
@@ -29,7 +30,8 @@ defmodule Game.QuizChannel do
               %{type: "score",
                 score: Round.calculate_score(data.answers)}
             current_question ->
-              %{current_question: serialize_question(current_question),
+              %{type: "next-round",
+                current_question: serialize_question(current_question),
                 remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
           end
           {:reply, {:ok, payload}, assign(socket, :category, category)}
