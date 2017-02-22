@@ -65,4 +65,29 @@ defmodule Game.RoundTest do
     assert data.current_question.category == "Mathematics"
     assert Enum.all?(data.remaining_questions, fn(q) -> q.category == "Mathematics" end)
   end
+
+  test "cannot answer a non-running game", %{round: round} do
+    :ok = Game.Round.join(round, "Triangles")
+    assert {:error, :not_running} == Game.Round.answer(round, "Triangles", "not-important")
+  end
+
+  test "can answer a running game", %{round: round} do
+    :ok = Game.Round.join(round, "Triangles")
+    :ok = Game.Round.join(round, "Squares")
+    :ok = Game.Round.join(round, "Circles")
+
+    data = Game.Round.get_data(round)
+    old_player_state = Map.get(data.players, "Triangles")
+
+    :ok = Game.Round.answer(round, "Triangles", "1902")
+
+    data = Game.Round.get_data(round)
+    new_player_state = Map.get(data.players, "Triangles")
+
+    assert 9 == length(old_player_state.remaining_questions)
+    assert 8 == length(new_player_state.remaining_questions)
+    assert old_player_state.current_question !== new_player_state.current_question
+    assert old_player_state.answers == %{}
+    assert new_player_state.answers == %{old_player_state.current_question => "1902"}
+  end
 end

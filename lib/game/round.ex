@@ -52,6 +52,13 @@ defmodule Game.Round do
     :gen_statem.call(round, :get_data)
   end
 
+  def answer(category, player_name, answer) when is_binary(category) do
+    :gen_statem.call(via_tuple(category), {:answer, player_name, answer})
+  end
+  def answer(round, player_name, answer) do
+    :gen_statem.call(round, {:answer, player_name, answer})
+  end
+
   def via_tuple(category) do
     {:via, Registry, {RoundRegistry, category}}
   end
@@ -96,12 +103,35 @@ defmodule Game.Round do
     end
     {:next_state, new_state, new_data, [{:reply, from, :ok}]}
   end
+  def waiting_for_players({:call, from}, {:answer, _, _}, data) do
+    reply = {:error, :not_running}
+    {:next_state, :waiting_for_players, data, [{:reply, from, reply}]}
+  end
   def waiting_for_players(event_type, event_content, data) do
     handle_event(event_type, event_content, data)
   end
 
   def running({:call, from}, {:join, _player_name}, data) do
     {:next_state, :running, data, [{:reply, from, {:error, :round_full}}]}
+  end
+  def running({:call, from}, {:answer, player_name, answer}, data) do
+    case Map.get(data.players, player_name) do
+      nil ->
+        {:next_state, :running, data, [{:reply, from, {:error, :not_joined}}]}
+      player_state ->
+        new_player_state = case player_state.remaining_questions do
+          [] ->
+            %{player_state | answers: Map.put(player_state.answers, player_state.current_question, answer),
+                      current_question: nil}
+          [new_question | remaining] ->
+            %{player_state | answers: Map.put(player_state.answers, player_state.current_question, answer),
+                      current_question: new_question,
+                      remaining_questions: remaining}
+        end
+        new_players = Map.put(data.players, player_name, new_player_state)
+        new_data = Map.put(data, :players, new_players)
+        {:next_state, :running, new_data, [{:reply, from, :ok}]}
+    end
   end
   def running(event_type, event_content, data) do
     handle_event(event_type, event_content, data)
