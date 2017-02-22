@@ -27,6 +27,20 @@ defmodule Game.QuizChannel do
     end
   end
 
+  def handle_in("send-answer", %{"elapsed_time" => _elapsed_time, "answer" => answer}, socket) do
+    %{player_name: player_name, category: category} = socket.assigns
+
+    case Round.answer(category, player_name, answer) do
+      :ok ->
+        {:ok, data} = Round.get_player_state(category, player_name)
+        payload = %{current_question: serialize_question(data.current_question),
+                    remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
+        {:reply, {:ok, payload}, socket}
+      error ->
+        {:reply, {:error, %{reason: inspect(error)}}, socket}
+    end
+  end
+
   def handle_in("get-random-question", %{"category" => category}, socket) do
     data = category
            |> Game.Command.get_random_question
