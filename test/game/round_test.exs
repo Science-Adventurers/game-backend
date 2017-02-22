@@ -2,8 +2,8 @@ defmodule Game.RoundTest do
   use ExUnit.Case
 
   setup do
-    max_players = 3
-    {:ok, round} = Game.Round.start_link("Mathematics", max_players)
+    min_players = 3
+    {:ok, round} = Game.Round.start_link("Mathematics", min_players)
 
     {:ok, round: round}
   end
@@ -27,14 +27,6 @@ defmodule Game.RoundTest do
 
     assert data.current_question == player_state.current_question
     assert data.remaining_questions == player_state.remaining_questions
-  end
-
-  test "cannot join a full game", %{round: round} do
-    :ok = Game.Round.join(round, "Triangles")
-    :ok = Game.Round.join(round, "Squares")
-    :ok = Game.Round.join(round, "Circles")
-
-    assert {:error, :round_full} == Game.Round.join(round, "Cubes")
   end
 
   test "has_player?/2", %{round: round} do
@@ -105,7 +97,7 @@ defmodule Game.RoundTest do
     {:ok, :round_over, score} = Game.Round.answer(round, "Triangles", "1902", 1000)
 
     assert score >= 0
-    assert {:error, :round_over} == Game.Round.answer(round, "Triangles", "1902", 1000)
+    assert {:error, :not_joined} == Game.Round.answer(round, "Triangles", "1902", 1000)
   end
 
   test "all players finish", %{round: round} do

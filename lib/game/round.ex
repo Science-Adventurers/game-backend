@@ -12,7 +12,7 @@ defmodule Game.Round do
 
   defmodule Data do
     defstruct category: nil,
-              max_players: 3,
+              min_players: 1,
               players: %{},
               current_question: nil,
               remaining_questions: []
@@ -20,8 +20,8 @@ defmodule Game.Round do
 
   ### Public api ###
 
-  def start_link(category, max_players) do
-    :gen_statem.start_link(via_tuple(category), __MODULE__, {category, max_players}, [])
+  def start_link(category, min_players) do
+    :gen_statem.start_link(via_tuple(category), __MODULE__, {category, min_players}, [])
   end
 
   def join(category, player_name) when is_binary(category) do
@@ -75,14 +75,14 @@ defmodule Game.Round do
 
   ### Mandatory callbacks ###
 
-  def init({category, max_players}) do
+  def init({category, min_players}) do
     options_pool = ItemStore.options_pool(category)
     questions = category
                 |> ItemStore.random_from_category(@number_of_questions)
                 |> Enum.map(fn(item) -> Question.from_item(item, options_pool) end)
     [current | remaining] = questions
     data = %Data{category: category,
-                 max_players: max_players,
+                 min_players: min_players,
                  current_question: current,
                  remaining_questions: remaining}
     {:ok, :waiting_for_players, data}
@@ -106,7 +106,7 @@ defmodule Game.Round do
                               %PlayerState{current_question: data.current_question,
                                            remaining_questions: data.remaining_questions})
     new_data = %{data | players: new_players}
-    new_state = if Map.size(new_players) >= data.max_players do
+    new_state = if Map.size(new_players) >= data.min_players do
       :running
     else
       :waiting_for_players
@@ -121,8 +121,13 @@ defmodule Game.Round do
     handle_event(event_type, event_content, data)
   end
 
-  def running({:call, from}, {:join, _player_name}, data) do
-    {:next_state, :running, data, [{:reply, from, {:error, :round_full}}]}
+  def running({:call, from}, {:join, player_name}, data) do
+    new_players = Map.put_new(data.players,
+                              player_name,
+                              %PlayerState{current_question: data.current_question,
+                                           remaining_questions: data.remaining_questions})
+    new_data = %{data | players: new_players}
+    {:next_state, :running, new_data, [{:reply, from, :ok}]}
   end
   def running({:call, from}, {:answer, player_name, answer, elapsed_time}, data) do
     case Map.get(data.players, player_name) do
@@ -142,7 +147,8 @@ defmodule Game.Round do
           {:next_state, :finish, new_data, [{:reply, from, {:ok, :round_over, score}},
                                             {:next_event, :internal, :stop}]}
         else
-          {:next_state, :running, new_data, [{:reply, from, {:ok, :round_over, score}}]}
+          {:next_state, :running, new_data, [{:reply, from, {:ok, :round_over, score}},
+                                             {:next_event, :internal, {:remove_player, player_name}}]}
         end
       %{current_question: current_question, remaining_questions: [new_question | remaining]} = player_state ->
         new_player_state = %{player_state | answers: Map.put(player_state.answers, current_question, {answer, elapsed_time}),
@@ -152,6 +158,11 @@ defmodule Game.Round do
         new_data = Map.put(data, :players, new_players)
         {:next_state, :running, new_data, [{:reply, from, {:ok, :next_round}}]}
     end
+  end
+  def running(:internal, {:remove_player, player_name}, data) do
+    new_players = Map.delete(data.players, player_name)
+    new_data = %{data | players: new_players}
+    {:next_state, :running, new_data}
   end
   def running(event_type, event_content, data) do
     handle_event(event_type, event_content, data)
