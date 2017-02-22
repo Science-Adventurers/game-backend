@@ -41,10 +41,10 @@ defmodule Game.QuizChannel do
     end
   end
 
-  def handle_in("send-answer", %{"elapsed_time" => _elapsed_time, "answer" => answer}, socket) do
+  def handle_in("send-answer", %{"elapsed_time" => elapsed_time, "answer" => answer}, socket) do
     %{player_name: player_name, category: category} = socket.assigns
 
-    case Round.answer(category, player_name, answer) do
+    case Round.answer(category, player_name, answer, elapsed_time) do
       {:ok, :next_round} ->
         {:ok, data} = Round.get_player_state(category, player_name)
         payload = %{type: "next-round",

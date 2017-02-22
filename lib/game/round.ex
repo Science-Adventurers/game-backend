@@ -52,11 +52,11 @@ defmodule Game.Round do
     :gen_statem.call(round, :get_data)
   end
 
-  def answer(category, player_name, answer) when is_binary(category) do
-    :gen_statem.call(via_tuple(category), {:answer, player_name, answer})
+  def answer(category, player_name, answer, elapsed_time) when is_binary(category) do
+    :gen_statem.call(via_tuple(category), {:answer, player_name, answer, elapsed_time})
   end
-  def answer(round, player_name, answer) do
-    :gen_statem.call(round, {:answer, player_name, answer})
+  def answer(round, player_name, answer, elapsed_time) do
+    :gen_statem.call(round, {:answer, player_name, answer, elapsed_time})
   end
 
   def via_tuple(category) do
@@ -64,9 +64,9 @@ defmodule Game.Round do
   end
 
   def calculate_score(answers_map) do
-    Enum.reduce(answers_map, 0, fn({question, answer}, acc) ->
+    Enum.reduce(answers_map, 0, fn({question, {answer, elapsed_time}}, acc) ->
       if question.answer == answer do
-        acc + 1
+        acc + penalized_score(elapsed_time)
       else
         acc
       end
@@ -113,7 +113,7 @@ defmodule Game.Round do
     end
     {:next_state, new_state, new_data, [{:reply, from, :ok}]}
   end
-  def waiting_for_players({:call, from}, {:answer, _, _}, data) do
+  def waiting_for_players({:call, from}, {:answer, _, _, _}, data) do
     reply = {:error, :not_running}
     {:next_state, :waiting_for_players, data, [{:reply, from, reply}]}
   end
@@ -124,14 +124,14 @@ defmodule Game.Round do
   def running({:call, from}, {:join, _player_name}, data) do
     {:next_state, :running, data, [{:reply, from, {:error, :round_full}}]}
   end
-  def running({:call, from}, {:answer, player_name, answer}, data) do
+  def running({:call, from}, {:answer, player_name, answer, elapsed_time}, data) do
     case Map.get(data.players, player_name) do
       nil ->
         {:next_state, :running, data, [{:reply, from, {:error, :not_joined}}]}
       %{current_question: nil} ->
         {:next_state, :running, data, [{:reply, from, {:error, :round_over}}]}
       %{current_question: current_question, remaining_questions: []} = player_state ->
-        new_answers = Map.put(player_state.answers, current_question, answer)
+        new_answers = Map.put(player_state.answers, current_question, {answer, elapsed_time})
         new_player_state = %{player_state | answers: new_answers,
                                             current_question: nil}
         new_players = Map.put(data.players, player_name, new_player_state)
@@ -145,7 +145,7 @@ defmodule Game.Round do
           {:next_state, :running, new_data, [{:reply, from, {:ok, :round_over, score}}]}
         end
       %{current_question: current_question, remaining_questions: [new_question | remaining]} = player_state ->
-        new_player_state = %{player_state | answers: Map.put(player_state.answers, current_question, answer),
+        new_player_state = %{player_state | answers: Map.put(player_state.answers, current_question, {answer, elapsed_time}),
                                             current_question: new_question,
                                             remaining_questions: remaining}
         new_players = Map.put(data.players, player_name, new_player_state)
@@ -194,4 +194,8 @@ defmodule Game.Round do
       Game.Leaderboard.record(name, data.category, score)
     end)
   end
+
+  defp penalized_score(elapsed_time) when elapsed_time in (0..5000), do: 10
+  defp penalized_score(elapsed_time) when elapsed_time in (5001..10000), do: 5
+  defp penalized_score(elapsed_time) when elapsed_time > 10000, do: 2
 end

@@ -68,7 +68,7 @@ defmodule Game.RoundTest do
 
   test "cannot answer a non-running game", %{round: round} do
     :ok = Game.Round.join(round, "Triangles")
-    assert {:error, :not_running} == Game.Round.answer(round, "Triangles", "not-important")
+    assert {:error, :not_running} == Game.Round.answer(round, "Triangles", "not-important", 1000)
   end
 
   test "can answer a running game", %{round: round} do
@@ -79,7 +79,9 @@ defmodule Game.RoundTest do
     data = Game.Round.get_data(round)
     old_player_state = Map.get(data.players, "Triangles")
 
-    {:ok, :next_round} = Game.Round.answer(round, "Triangles", "1902")
+    correct_answer = old_player_state.current_question.answer
+
+    {:ok, :next_round} = Game.Round.answer(round, "Triangles", correct_answer , 1000)
 
     data = Game.Round.get_data(round)
     new_player_state = Map.get(data.players, "Triangles")
@@ -88,7 +90,7 @@ defmodule Game.RoundTest do
     assert 3 == length(new_player_state.remaining_questions)
     assert old_player_state.current_question !== new_player_state.current_question
     assert old_player_state.answers == %{}
-    assert new_player_state.answers == %{old_player_state.current_question => "1902"}
+    assert new_player_state.answers == %{old_player_state.current_question => {correct_answer, 1000}}
   end
 
   test "finishing a game", %{round: round} do
@@ -97,13 +99,13 @@ defmodule Game.RoundTest do
     :ok = Game.Round.join(round, "Circles")
 
     Enum.each(1..4, fn(_) ->
-      {:ok, :next_round} = Game.Round.answer(round, "Triangles", "1902")
+      {:ok, :next_round} = Game.Round.answer(round, "Triangles", "1902", 1000)
     end)
 
-    {:ok, :round_over, score} = Game.Round.answer(round, "Triangles", "1902")
+    {:ok, :round_over, score} = Game.Round.answer(round, "Triangles", "1902", 1000)
 
     assert score >= 0
-    assert {:error, :round_over} == Game.Round.answer(round, "Triangles", "1902")
+    assert {:error, :round_over} == Game.Round.answer(round, "Triangles", "1902", 1000)
   end
 
   test "all players finish", %{round: round} do
@@ -112,18 +114,18 @@ defmodule Game.RoundTest do
     :ok = Game.Round.join(round, "Circles")
 
     Enum.each(1..4, fn(_) ->
-      {:ok, :next_round} = Game.Round.answer(round, "Triangles", "1902")
+      {:ok, :next_round} = Game.Round.answer(round, "Triangles", "1902", 1000)
     end)
     Enum.each(1..4, fn(_) ->
-      {:ok, :next_round} = Game.Round.answer(round, "Squares", "1902")
+      {:ok, :next_round} = Game.Round.answer(round, "Squares", "1902", 1000)
     end)
     Enum.each(1..4, fn(_) ->
-      {:ok, :next_round} = Game.Round.answer(round, "Circles", "1902")
+      {:ok, :next_round} = Game.Round.answer(round, "Circles", "1902", 1000)
     end)
 
-    {:ok, :round_over, _score} = Game.Round.answer(round, "Triangles", "1902")
-    {:ok, :round_over, _score} = Game.Round.answer(round, "Squares", "1902")
-    {:ok, :round_over, _score} = Game.Round.answer(round, "Circles", "1902")
+    {:ok, :round_over, _score} = Game.Round.answer(round, "Triangles", "1902", 1000)
+    {:ok, :round_over, _score} = Game.Round.answer(round, "Squares", "1902", 1000)
+    {:ok, :round_over, _score} = Game.Round.answer(round, "Circles", "1902", 1000)
 
     assert Process.info(round) == nil
   end
