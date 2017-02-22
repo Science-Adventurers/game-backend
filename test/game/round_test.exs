@@ -18,6 +18,21 @@ defmodule Game.RoundTest do
     assert MapSet.new(["Triangles"]) == Game.Round.get_data(round).players
   end
 
+  test "cannot join a full game", %{round: round} do
+    :ok = Game.Round.join(round, "Triangles")
+    :ok = Game.Round.join(round, "Squares")
+    :ok = Game.Round.join(round, "Circles")
+
+    assert {:error, :round_full} == Game.Round.join(round, "Cubes")
+  end
+
+  test "has_player?/2", %{round: round} do
+    :ok = Game.Round.join(round, "Triangles")
+
+    assert Game.Round.has_player?(round, "Triangles")
+    refute Game.Round.has_player?(round, "Squares")
+  end
+
   test "switches to running state when 3 players join", %{round: round} do
     :ok = Game.Round.join(round, "Triangles")
     :ok = Game.Round.join(round, "Squares")

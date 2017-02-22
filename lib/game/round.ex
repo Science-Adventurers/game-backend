@@ -24,6 +24,13 @@ defmodule Game.Round do
     :gen_statem.call(round, {:join, player_name})
   end
 
+  def has_player?(category, player_name) when is_binary(category) do
+    :gen_statem.call(via_tuple(category), {:has_player?, player_name})
+  end
+  def has_player?(round, player_name) do
+    :gen_statem.call(round, {:has_player?, player_name})
+  end
+
   def get_data(category) when is_binary(category) do
     :gen_statem.call(via_tuple(category), :get_data)
   end
@@ -73,9 +80,20 @@ defmodule Game.Round do
     handle_event(event_type, event_content, data)
   end
 
+  def running({:call, from}, {:join, _player_name}, data) do
+    {:next_state, :running, data, [{:reply, from, {:error, :round_full}}]}
+  end
+  def running(event_type, event_content, data) do
+    handle_event(event_type, event_content, data)
+  end
+
   ### Common events ###
 
   defp handle_event({:call, from}, :get_data, data) do
     {:keep_state, data, [{:reply, from, data}]}
+  end
+  defp handle_event({:call, from}, {:has_player?, player_name}, data) do
+    has_player = MapSet.member?(data.players, player_name)
+    {:keep_state, data, [{:reply, from, has_player}]}
   end
 end
