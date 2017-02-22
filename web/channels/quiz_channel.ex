@@ -31,10 +31,15 @@ defmodule Game.QuizChannel do
     %{player_name: player_name, category: category} = socket.assigns
 
     case Round.answer(category, player_name, answer) do
-      :ok ->
+      {:ok, :next_round} ->
         {:ok, data} = Round.get_player_state(category, player_name)
-        payload = %{current_question: serialize_question(data.current_question),
+        payload = %{type: "next-round",
+                    current_question: serialize_question(data.current_question),
                     remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
+        {:reply, {:ok, payload}, socket}
+      {:ok, :round_over, score} ->
+        payload = %{type: "score",
+                    score: score}
         {:reply, {:ok, payload}, socket}
       error ->
         {:reply, {:error, %{reason: inspect(error)}}, socket}

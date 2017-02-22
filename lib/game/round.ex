@@ -118,19 +118,23 @@ defmodule Game.Round do
     case Map.get(data.players, player_name) do
       nil ->
         {:next_state, :running, data, [{:reply, from, {:error, :not_joined}}]}
-      player_state ->
-        new_player_state = case player_state.remaining_questions do
-          [] ->
-            %{player_state | answers: Map.put(player_state.answers, player_state.current_question, answer),
-                      current_question: nil}
-          [new_question | remaining] ->
-            %{player_state | answers: Map.put(player_state.answers, player_state.current_question, answer),
-                      current_question: new_question,
-                      remaining_questions: remaining}
-        end
+      %{current_question: nil} ->
+        {:next_state, :running, data, [{:reply, from, {:error, :round_over}}]}
+      %{current_question: current_question, remaining_questions: []} = player_state ->
+        new_answers = Map.put(player_state.answers, current_question, answer)
+        new_player_state = %{player_state | answers: new_answers,
+                                            current_question: nil}
         new_players = Map.put(data.players, player_name, new_player_state)
         new_data = Map.put(data, :players, new_players)
-        {:next_state, :running, new_data, [{:reply, from, :ok}]}
+        score = calculate_score(new_answers)
+        {:next_state, :running, new_data, [{:reply, from, {:ok, :round_over, score}}]}
+      %{current_question: current_question, remaining_questions: [new_question | remaining]} = player_state ->
+        new_player_state = %{player_state | answers: Map.put(player_state.answers, current_question, answer),
+                                            current_question: new_question,
+                                            remaining_questions: remaining}
+        new_players = Map.put(data.players, player_name, new_player_state)
+        new_data = Map.put(data, :players, new_players)
+        {:next_state, :running, new_data, [{:reply, from, {:ok, :next_round}}]}
     end
   end
   def running(event_type, event_content, data) do
@@ -154,5 +158,17 @@ defmodule Game.Round do
         {:ok, state}
     end
     {:keep_state, data, [{:reply, from, reply}]}
+  end
+
+  ### Helpers ###
+
+  def calculate_score(answers_map) do
+    Enum.reduce(answers_map, 0, fn({question, answer}, acc) ->
+      if question.answer == answer do
+        acc + 1
+      else
+        acc
+      end
+    end)
   end
 end
