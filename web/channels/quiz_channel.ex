@@ -11,15 +11,27 @@ defmodule Game.QuizChannel do
     {:ok, pid} = RoundSupervisor.get_or_start_round(category)
     if Round.has_player?(pid, socket.assigns.player_name) do
       {:ok, data} = Round.get_player_state(pid, socket.assigns.player_name)
-      payload = %{current_question: serialize_question(data.current_question),
-                  remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
+      payload = case data.current_question do
+        nil ->
+          %{type: "score",
+            score: Round.calculate_score(data.answers)}
+        current_question ->
+          %{current_question: serialize_question(current_question),
+            remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
+      end
       {:reply, {:ok, payload}, assign(socket, :category, category)}
     else
       case Round.join(category, socket.assigns.player_name) do
         :ok ->
           {:ok, data} = Round.get_player_state(pid, socket.assigns.player_name)
-          payload = %{current_question: serialize_question(data.current_question),
-                      remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
+          payload = case data.current_question do
+            nil ->
+              %{type: "score",
+                score: Round.calculate_score(data.answers)}
+            current_question ->
+              %{current_question: serialize_question(current_question),
+                remaining_questions: Enum.map(data.remaining_questions, &serialize_question/1)}
+          end
           {:reply, {:ok, payload}, assign(socket, :category, category)}
         {:error, :round_full} ->
           {:reply, {:error, %{reason: "Round is full"}}, socket}
