@@ -84,8 +84,8 @@ defmodule Game.RoundTest do
     data = Game.Round.get_data(round)
     new_player_state = Map.get(data.players, "Triangles")
 
-    assert 9 == length(old_player_state.remaining_questions)
-    assert 8 == length(new_player_state.remaining_questions)
+    assert 4 == length(old_player_state.remaining_questions)
+    assert 3 == length(new_player_state.remaining_questions)
     assert old_player_state.current_question !== new_player_state.current_question
     assert old_player_state.answers == %{}
     assert new_player_state.answers == %{old_player_state.current_question => "1902"}
@@ -96,7 +96,7 @@ defmodule Game.RoundTest do
     :ok = Game.Round.join(round, "Squares")
     :ok = Game.Round.join(round, "Circles")
 
-    Enum.each(1..9, fn(_) ->
+    Enum.each(1..4, fn(_) ->
       {:ok, :next_round} = Game.Round.answer(round, "Triangles", "1902")
     end)
 

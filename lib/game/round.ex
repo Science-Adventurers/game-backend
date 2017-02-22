@@ -1,6 +1,6 @@
 defmodule Game.Round do
   @behaviour :gen_statem
-  @number_of_questions 10
+  @number_of_questions 5
 
   alias Game.{ItemStore, Question, RoundRegistry}
 
@@ -61,6 +61,16 @@ defmodule Game.Round do
 
   def via_tuple(category) do
     {:via, Registry, {RoundRegistry, category}}
+  end
+
+  def calculate_score(answers_map) do
+    Enum.reduce(answers_map, 0, fn({question, answer}, acc) ->
+      if question.answer == answer do
+        acc + 1
+      else
+        acc
+      end
+    end)
   end
 
   ### Mandatory callbacks ###
@@ -158,17 +168,5 @@ defmodule Game.Round do
         {:ok, state}
     end
     {:keep_state, data, [{:reply, from, reply}]}
-  end
-
-  ### Helpers ###
-
-  def calculate_score(answers_map) do
-    Enum.reduce(answers_map, 0, fn({question, answer}, acc) ->
-      if question.answer == answer do
-        acc + 1
-      else
-        acc
-      end
-    end)
   end
 end
