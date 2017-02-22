@@ -9,7 +9,7 @@ defmodule Game.RoundSupervisor do
   end
 
   def start_child(category) do
-    Supervisor.start_child(__MODULE__, [category, 1])
+    Supervisor.start_child(__MODULE__, [category, 500])
   end
 
   def start_link do
