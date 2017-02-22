@@ -1,18 +1,31 @@
-# Game
+# Science Museum Hack - February 2017
 
-To start your Phoenix app:
+## Science Adventurers
 
-  * Install dependencies with `mix deps.get`
-  * Start Phoenix endpoint with `mix phoenix.server`
+- Make a team
+- Choose a topic (like space!)
+- Run around the Science Museum to find the object you're shown and answer a quiz question about it
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+This is the game server, please refer to <https://github.com/Science-Adventurers/game-frontend> if you're interested in the frontend.
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+Available at <https://smhack-game-api.herokuapp.com/>
 
-## Learn more
+## Tech
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+The application is a standalone [Elixir Phoenix](http://www.phoenixframework.org) application without any extra depencies (all data is bundled and loaded in memory).
+
+## Setup
+
+Assuming you have Elixir 1.4 installed, you can:
+
+* Install dependencies with `mix deps.get`
+* Start Phoenix endpoint with `mix phoenix.server`
+* Run tests with `mix test`
+
+## Interaction
+
+All interaction is websockets-based, please refer to the frontend codebase to see how that works.
+
+## Leaderboard
+
+You can visit [`localhost:4000`](http://localhost:4000/api/leaderboard) to see the current leaderboard.
