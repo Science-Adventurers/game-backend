@@ -23,7 +23,7 @@ config :game,
   data_path: "/app/priv/data/smg_ondisplay_with_image.json"
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :debug
 
 # ## SSL Support
 #
